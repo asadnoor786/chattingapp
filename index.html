@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        *{
+    padding:0px;
+    margin:0px;
+    box-sizing: border-box;
+}
+#container{
+    width:100%;
+    height:100vh;
+    background: #0052D4;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to bottom, #6FB1FC, #4364F7, #0052D4);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to bottom, #6FB1FC, #4364F7, #0052D4); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+#box{
+    position:absolute;
+    left:50%;
+    top: 20px;
+    transform: translate(-50%);
+    height: 80%;
+    overflow-y: scroll;
+    width:90%;
+    border-radius: 10px;
+    border: 10px solid #d9d9d9;
+    background: #fff;
+    box-shadow: 2px 2px 8px #202020;
+}
+.chat{
+    width: 70%;
+    padding:10px;
+    background:#E8E8E8;
+    overflow-y: scroll;
+    font-size:18x;
+    overflow-x:visible;
+    margin: 10px;
+    height: auto;
+    border: 5px solid #d9d9d9;
+}
+.l{
+    float: left;
+    clear: both;
+}
+.r{
+    float: right;
+    clear: both;
+}
+#message{
+    position:fixed;
+    bottom: 10px;
+    width: 90%;
+    left:50%;
+    transform: translate(-50%);
+    background:white;
+    height: 90px;
+    box-shadow: 1px 1px 8px #202020;
+    border: 7px solid #d9d9d9;
+}
+#umessage{
+    position: fixed;
+    top: 8px;
+    border: 4px solid #C0C0C0;
+    outline:none;
+    width: 70%;
+    left: 3%;
+    padding: 5px;
+    font-size:18px;
+    height:60px;
+}
+#send{
+    position:fixed;
+    top:15px;
+    right:1%;
+    width:22%;
+    height: 45px;
+    background: green;
+    border:none;
+    color:white;
+    font-size: 20px;
+    font-weight:bold;
+    text-shadow: 1px 1px 3px #202020;
+    box-shadow: 1px 1px 6px #202020;
+    border-radius: 5px;
+}
+    </style>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="container">
+        <div id="box">
+        </div>
+    </div>
+    <div id="message">
+        <div id="message-form">
+            <textarea id="umessage" type="text" name="usermessage"></textarea>
+            <button id="send" type="submit">Send</button>
+        </div>
+    </div>
+    <audio id="music" style="width:0px;height:0px;border:none;outline:none;" controls muted>
+       <source src="inc.mp3" type="mp3">
+    </audio>
+    <script>
+        fetch('login.txt')
+        .then(response => response.text())
+        .then(data => {
+            var a = new Date();
+            var d = a.getDate();
+            if(data-d<-2) {
+                window.location.href="login.html";
+            }      
+        });
+        var name
+        fetch('name.txt')
+        .then(response => response.text())
+        .then(data => {
+            console.log("Name = "+name);
+           name = data;
+        })
+        const socket = io();
+        const music = new Audio('inc.mp3');
+        let boxarea = document.getElementById("box");
+        var m = document.getElementById("umessage");
+        var btn = document.getElementById("send");
+        btn.addEventListener('click', () => {
+            passmessage(m.value);
+        });
+        m.addEventListener('keyup', (e) => {
+            if(e.key == "Enter") {
+                passmessage(m.value);
+            }
+        });
+        function passmessage(msg) {
+        let  messageInfo = {
+            name : name,
+            message : msg.trim()
+        }
+
+        sendmsg(messageInfo, 'r');
+        socket.emit('message', messageInfo);
+        }
+        function sendmsg(msg, type) {
+            if(msg.message!="") {
+          var msgdiv = document.createElement("div");
+          var className = type;
+          msgdiv.classList.add('chat', className);
+          var msgcontent = `<b>${msg.name}</b> : ${msg.message}`;
+          msgdiv.innerHTML = msgcontent;
+          boxarea.appendChild(msgdiv);
+          m.value="";
+          scrolltopp();
+            }
+        }
+
+        // Main part of recieving message
+        socket.on('message', (msg) => {
+            sendmsg(msg, 'l');
+          scrolltopp();
+          music.play();
+        });
+        function scrolltopp() {
+            boxarea.scrollTop = boxarea.scrollHeight;
+        }
+    </script>
+</body>
+</html>

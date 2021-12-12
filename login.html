@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            padding:0px;
+            margin:0px;
+            box-sizing: border-box;
+        }
+        #signup-form{
+            width: 350px;
+            position:absolute;
+            top:50%;
+            left:50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 1px 1px 6px #202020;
+            height:400px;
+            background: #d9d9d9;
+        }
+#head{
+    font-size:35px;
+    position: absolute;
+    top:30px;
+    left: 50%;
+    white-space: nowrap;
+    transform: translate(-50%);
+}
+#name{
+    height: 45px;
+    width:80%;
+    border: 5px solid #d9d9d9;
+    outline:none;
+    box-shadow: 1px 1px 7px #202020;
+    position:absolute;
+    top:120px;
+    left:10%;
+    padding: 10px;
+}
+#email{
+    height: 45px;
+    width:80%;
+    border: 5px solid #d9d9d9;
+    outline:none;
+    box-shadow: 1px 1px 7px #202020;
+    position:absolute;
+    top:205px;
+    left:10%;
+    padding: 10px;
+}
+
+input{
+    font-size:20px;
+}
+#btn{
+    width:220px;
+    height:50px;
+    border-radius: 10px;
+    background: #d9d9d9;
+    position:absolute;
+    top: 300px;
+    left: 50%;
+    font-weight: bold;
+    font-size: 25px;
+    border:none;
+    box-shadow: 2px 2px 8px #202020;
+    background:green;
+    color:#202020;
+    text-shadow: 3px 3px 6px #202020;
+    color:white;
+    transform: translate(-50%);
+}
+#container{
+    width: 100%;
+    height:100vh;
+    background: #0052D4;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to bottom, #6FB1FC, #4364F7, #0052D4);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to bottom, #6FB1FC, #4364F7, #0052D4); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+    </style>
+</head>
+<body>
+    <div id="container">
+    <form id="signup-form" action="" method="post">
+        <span id="head">Login Now</span>
+        <input id="name" name="email" type="email" placeholder="Your Email" required>
+        <input id="email" name="password" type="password" placeholder="Your Password" required>
+        <button id="btn" type="submit">Login</button>
+    </form>
+    </div>
+    <script>
+        fetch('login.txt')
+        .then(response => response.text())
+        .then(data => {
+            var a = new Date();
+            var d = a.getDate();
+            if(data-d>=-2) {
+                window.location.href="index.html";
+            }      
+        });
+    </script>
+</body>
+</html>
